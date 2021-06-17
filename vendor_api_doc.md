@@ -9,6 +9,9 @@
 |Authentication| basich auth|
 |Payload| JSON|
 
+Notes:
+**Always use HTTPS connection!**
+
 ### Authentication
 **Use basich auth!** The UCS support will create the user *(11-17 characters, /^[0-9_]+/)* and the password *(30 characters, /^[0-9a-f]{30}$/)* and set the available restaurant_ids for the givven user and password combination.
 User example: `409_16_475_105`
