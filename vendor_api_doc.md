@@ -27,6 +27,7 @@ Expected authentication header format in the POST request:
 - comment - a comment to the order (optional, max 255 character)
 - order_type - order type: 0 - delivery order, 1 - self-pickup order (required)
 - pay_type - type of payment: 0 - cash to the courier, 1 - by bank card to the courier (required)
+- pay_online_type - payed online: 1 -- will be payed offline: 0
 - client - client data
     - phone - phone number (required)
     - email - email (optional)
@@ -55,17 +56,17 @@ Expected authentication header format in the POST request:
 #### Example
 ```
 {
-    "objectid": "109150003",
-    "delivery_time": "2020-11-26T23:26:01",
-    "comment": "lacitest",
+    "objectid": "101150001",
+    "delivery_time": "2021-11-26T23:26:01",
+    "comment": "testcomment",
     "order_type": 0,
     "pay_type": 0,
     "pay_online_type": 0,
     "client": {
-        "phone": "+36303857256",
-        "email": "asdghfasd@djasd.hu",
-        "ln": "Laci",
-        "fn": "Farkas"
+        "phone": "+361110000",
+        "email": "test@test.hu",
+        "ln": "Testln",
+        "fn": "Testfn"
     },
     "order": [
         {
