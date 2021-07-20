@@ -7,10 +7,14 @@
 |Endpoint| `https://endpoint.ucs.hu/wp-json/vendor/v1/postorder/<restaurant_id>`|
 |Method| POST|
 |Authentication| basich auth|
+|User-Agent (header)| has to be defined, suggested: `restaurant_name-bot`|
+|referer| has to be defined, suggested: the restaurant's URL|
 |Payload| JSON|
 
-Notes:
-**Always use HTTPS connection!**
+### Important Notes:
+- **Always use HTTPS connection!**
+- **Always add `User-Agent` header to the request**
+- **Always add `referer` to the request**
 
 ### Authentication
 **Use basich auth!** The UCS support will create the user *(11-17 characters, /^[0-9_]+/)* and the password *(30 characters, /^[0-9a-f]{30}$/)* and set the available restaurant_ids for the givven user and password combination.
