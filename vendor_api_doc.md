@@ -138,7 +138,7 @@ When an order where the `pay_online_type` value is 1 is posted, it will be creat
 |Authentication| basich auth|
 |Payload| NONE|
 
-- `visit_id` is in the resturn Json of the pos order
+- `visit_id` is in the return Json of the pos order
 
 ### Success
 |Name | data|
@@ -173,4 +173,177 @@ When an order where the `pay_online_type` value is 1 is posted, it will be creat
 |400 | Missing authorization header. | `{"success":false,"data":"Missing authorization header."}` |
 |400 | Malformed authentication header. | `{"success":false,"data":"Malformed authentication header."}` |
 |403 | Invalid vendor id or token | `{"success":false,"data":"Invalid vendor id or token"}` |
+|404 | Order with this visit id can't be found. | `{"success":false,"data":"Order with this visit id can't be found."}` |
+
+
+## POST order status
+
+|Name | data|
+--- | ---
+|Endpoint| `https://endpoint.ucs.hu/wp-json/vendor/v1/order/status/<restaurant_id>/<visit_id>/<new_status>`|
+|Method| POST|
+|Authentication| basich auth|
+|Payload| NONE|
+
+### Important Notes:
+- **Always use HTTPS connection!**
+- **Always add `User-Agent` header to the request**
+- **Always add `referer` to the request**
+- **The new status <new_status> options are provided by the UCS team. Only the pre-registered status options (eg.: received, in_delivery, delivered, ...) can be used!**
+
+### Authentication
+**Use basich auth!** The UCS support will create the user *(11-17 characters, /^[0-9_]+/)* and the password *(30 characters, /^[0-9a-f]{30}$/)* and set the available restaurant_ids for the givven user and password combination.
+User example: `409_16_475_105`
+Password example: `813dfdrr2d597rktfefd0766b70b61`
+Expected authentication header format in the POST request:
+`authorization: Basic NDA5XzE2XzQ3NV8xMDU6MGYzN2M1MTc0MGM34DNmMDyiODFlYlf1NDIkdmI5`
+
+### Success
+|Name | data|
+--- | ---
+|Reponse code| 200|
+|Reponse body| json|
+|Reponse body| 👇|
+
+```
+{
+    "success": true,
+    "data": {
+        "remoteResponse": {
+            "remoteOrderId": 237
+        },
+        "data": {
+            "visit_id": "1618091731-589-109150003",
+            "new_status": "<the passed new status>",
+            "prev_status": "<the order's previous status. {string or null}>"
+        },
+        "source": "endpoint_server",
+        "status": "Ok"
+    }
+}
+```
+
+### Failed
+
+**Expected authentication/validation error reponses**
+
+|Error code | Error message | Example
+--- | --- | ---
+|404 | No route was found matching the URL and request method. | `{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}`|
+|400 | Missing authorization header. | `{"success":false,"data":"Missing authorization header."}` |
+|400 | Malformed authentication header. | `{"success":false,"data":"Malformed authentication header."}` |
+|403 | Invalid vendor id or token | `{"success":false,"data":"Invalid vendor id or token"}` |
+|404 | Order with this visit id can't be found. | `{"success":false,"data":"Order with this visit id can't be found."}` |
+|400 | The posted order status is not allowed in the system. | `{"success":false,"data":"The posted order status is not allowed in the system."}` |
+|400 | No available order status can be found. | `{"success":false,"data":"No available order status can be found."}` |
+|500 | Server error occured. Please try again later or get in touch with the server provider. | `{"success":false,"data":"Server error occured. Please try again later or get in touch with the server provider."}` |
+
+## GET available statuses for the restaurant
+
+|Name | data|
+--- | ---
+|Endpoint| `https://endpoint.ucs.hu/wp-json/vendor/v1/statuses/<restaurant_id>`|
+|Method| GET|
+|Authentication| basich auth|
+|Payload| NONE|
+
+### Important Notes:
+- **Always use HTTPS connection!**
+- **Always add `User-Agent` header to the request**
+- **Always add `referer` to the request**
+
+### Authentication
+**Use basich auth!** The UCS support will create the user *(11-17 characters, /^[0-9_]+/)* and the password *(30 characters, /^[0-9a-f]{30}$/)* and set the available restaurant_ids for the givven user and password combination.
+User example: `409_16_475_105`
+Password example: `813dfdrr2d597rktfefd0766b70b61`
+Expected authentication header format in the POST request:
+`authorization: Basic NDA5XzE2XzQ3NV8xMDU6MGYzN2M1MTc0MGM34DNmMDyiODFlYlf1NDIkdmI5`
+
+### Success
+|Name | data|
+--- | ---
+|Reponse code| 200|
+|Reponse body| json|
+|Reponse body| 👇|
+
+```
+{
+    "success": true,
+    "data": {
+        "status_slug": "status Name",
+        "status2_slug": "status2 Name"
+    }
+}
+```
+
+### Failed
+
+**Expected authentication/validation error reponses**
+
+|Error code | Error message | Example
+--- | --- | ---
+|404 | No route was found matching the URL and request method. | `{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}`|
+|400 | Missing authorization header. | `{"success":false,"data":"Missing authorization header."}` |
+|400 | Malformed authentication header. | `{"success":false,"data":"Malformed authentication header."}` |
+|403 | Invalid vendor id or token | `{"success":false,"data":"Invalid vendor id or token"}` |
+|400 | No available order status can be found. | `{"success":false,"data":"No available order status can be found."}` |
+|500 | Server error occured. Please try again later or get in touch with the server provider. | `{"success":false,"data":"Server error occured. Please try again later or get in touch with the server provider."}` |
+
+## GET order status
+
+|Name | data|
+--- | ---
+|Endpoint| `https://endpoint.ucs.hu/wp-json/vendor/v1/order/status/<restaurant_id>/<visit_id>`|
+|Method| GET|
+|Authentication| basich auth|
+|Payload| NONE|
+
+### Important Notes:
+- **Always use HTTPS connection!**
+- **Always add `User-Agent` header to the request**
+- **Always add `referer` to the request**
+
+### Authentication
+**Use basich auth!** The UCS support will create the user *(11-17 characters, /^[0-9_]+/)* and the password *(30 characters, /^[0-9a-f]{30}$/)* and set the available restaurant_ids for the givven user and password combination.
+User example: `409_16_475_105`
+Password example: `813dfdrr2d597rktfefd0766b70b61`
+Expected authentication header format in the POST request:
+`authorization: Basic NDA5XzE2XzQ3NV8xMDU6MGYzN2M1MTc0MGM34DNmMDyiODFlYlf1NDIkdmI5`
+
+### Success
+|Name | data|
+--- | ---
+|Reponse code| 200|
+|Reponse body| json|
+|Reponse body| 👇|
+
+```
+{
+    "success": true,
+    "data": {
+        "remoteResponse": {
+            "remoteOrderId": 237
+        },
+        "data": {
+            "visit_id": "1618091731-589-109150003",
+            "order_status": "<the order status>",
+        },
+        "source": "endpoint_server",
+        "status": "Ok"
+    }
+}
+```
+
+### Failed
+
+**Expected authentication/validation error reponses**
+
+|Error code | Error message | Example
+--- | --- | ---
+|404 | No route was found matching the URL and request method. | `{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}`|
+|400 | Missing authorization header. | `{"success":false,"data":"Missing authorization header."}` |
+|400 | Malformed authentication header. | `{"success":false,"data":"Malformed authentication header."}` |
+|403 | Invalid vendor id or token | `{"success":false,"data":"Invalid vendor id or token"}` |
+|400 | No available order status can be found. | `{"success":false,"data":"No available order status can be found."}` |
+|500 | Server error occured. Please try again later or get in touch with the server provider. | `{"success":false,"data":"Server error occured. Please try again later or get in touch with the server provider."}` |
 |404 | Order with this visit id can't be found. | `{"success":false,"data":"Order with this visit id can't be found."}` |
