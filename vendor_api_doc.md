@@ -127,6 +127,51 @@ Expected authentication header format in the POST request:
 |400 | Mallformed POST data: `<x>`. | `{"success":false,"data":"Mallformed POST data: <x>."}` |
 |500 | Server error occured. Please try again later or get in touch with the server provider. | `{"success":false,"data":"Server error occured. Please try again later or get in touch with the server provider."}` |
 
+### Use custom order_number
+If it's enabled on the endpoint server it's possible to use custom order_number. The order_number is a unique identifier for the order and will be used on the restaurant terminal side.
+
+#### Notes
+- **Important** It has to be  enabled on the endpoint server. Please ask the server provider to make it avilable for you.
+- If it's not enabled, the server will ignore the extra field and fall back the default order_number.
+- If the custom `order_number` option is enabled but the POST request doesn't contain the `order_number` field, the server will fall back the default order_number.
+
+#### Data / payload
+The payload of the POST request is the same as the one for the POST order. But you can provide an extra field `order_number` with the order_number you want to use.
+
+
+#### Example payload
+```
+{
+    "objectid": "101150001",
+    "delivery_time": "2021-11-26T23:26:01",
+    "comment": "testcomment",
+    "order_type": 0,
+    "pay_type": 0,
+    "pay_online_type": 0,
+    "client": {
+        "phone": "+361110000",
+        "email": "test@test.hu",
+        "ln": "Testln",
+        "fn": "Testfn"
+    },
+    "order": [
+        {
+            "id": "1002217",
+            "qnt": 5000,
+            "type": "d",
+            "items": []
+        },
+        {
+            "id": "1001552",
+            "qnt": 1000,
+            "type": "d",
+            "items": []
+        }
+    ],
+    "order_number": "123456789"
+}
+```
+
 ## POST order payed
 
 When an order where the `pay_online_type` value is 1 is posted, it will be created in a "pending" state. It stays in the pendign state while the endpoint recieves a payed order post for it. Orders in pending state are not forwarded to the terminal in the restaurant.
