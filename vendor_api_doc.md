@@ -125,19 +125,21 @@ Expected authentication header format in the POST request:
 |403 | Invalid vendor id or token | `{"success":false,"data":"Invalid vendor id or token"}` |
 |400 | Missing `<x>` from the request. | `{"success":false,"data":"Missing <x> from the request."}` |
 |400 | Mallformed POST data: `<x>`. | `{"success":false,"data":"Mallformed POST data: <x>."}` |
+|400 | If custom `order_number` is enabled, but missing from the payload | `{"success":false,"data":"Missing `order_number` from the request."}` |
+|400 | If custom `order_number` is enabled, and the provided one is not numeric and between 0-99999 | `{"success":false,"data":"Invalid `order_number` format."}` |
 |500 | Server error occured. Please try again later or get in touch with the server provider. | `{"success":false,"data":"Server error occured. Please try again later or get in touch with the server provider."}` |
 
-### Use custom order_number
+### 🔌 Use custom order_number
 If it's enabled on the endpoint server it's possible to use custom order_number. The order_number is a unique identifier for the order and will be used on the restaurant terminal side.
 
 #### Notes
 - **Important** It has to be  enabled on the endpoint server. Please ask the server provider to make it avilable for you.
 - If it's not enabled, the server will ignore the extra field and fall back the default order_number.
 - If the custom `order_number` option is enabled but the POST request doesn't contain the `order_number` field, the server will fall back the default order_number.
+- The `order_number` must be numeric and between 0 and 99999.
 
 #### Data / payload
 The payload of the POST request is the same as the one for the POST order. But you can provide an extra field `order_number` with the order_number you want to use.
-
 
 #### Example payload
 ```
@@ -168,9 +170,34 @@ The payload of the POST request is the same as the one for the POST order. But y
             "items": []
         }
     ],
-    "order_number": "123456789"
+    "order_number": "12345"
 }
 ```
+
+#### Example success response
+
+The response's `data>data>seq_number` has to be the same as the custom `order_number` you provided.
+
+```
+{
+    "success": true,
+    "data": {
+        "remoteResponse": {
+            "remoteOrderId": 237
+        },
+        "data": {
+            "seq_number": 12345,
+            "visit_id": "1618091731-589-109150003"
+        },
+        "source": "endpoint_server",
+        "status": "Ok"
+    }
+}
+```
+
+
+
+---
 
 ## POST order payed
 
